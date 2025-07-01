@@ -156,17 +156,24 @@ export default {
   },
   methods: {
     handleLogin() {
-      this.loading = true;
-      setTimeout(() => {
-        if (this.email === 'sastika@gmail.com' && this.password === 'sasT@2603') {
-          this.error = null;
-          this.$router.push('/home'); // ✅ redirect to home
-        } else {
-          this.error = 'Invalid email or password.';
-        }
-        this.loading = false;
-      }, 1000);
-    },
+  this.loading = true;
+
+  setTimeout(() => {
+    const users = JSON.parse(localStorage.getItem('users') || '[]');
+    const foundUser = users.find(
+      user => user.email === this.email && user.password === this.password
+    );
+
+    if (foundUser) {
+      this.error = null;
+      this.$router.push('/home');
+    } else {
+      this.error = 'Invalid email or password.';
+    }
+
+    this.loading = false;
+  }, 1000);
+},
 
     sendResetEmail() {
       if (this.resetEmail) {
@@ -180,16 +187,28 @@ export default {
       }
     },
     registerAccount() {
-      if (this.register.name && this.register.email && this.register.password) {
-        this.registerSuccess = true;
-        setTimeout(() => {
-          this.registerSuccess = false;
-          this.register = { name: '', email: '', password: '' };
-          // eslint-disable-next-line no-undef
-          bootstrap.Modal.getInstance(document.getElementById('registerModal')).hide();
-        }, 2000);
-      }
-    },
+  if (this.register.name && this.register.email && this.register.password) {
+    const users = JSON.parse(localStorage.getItem('users') || '[]');
+
+    // Check if email already exists
+    const exists = users.find(user => user.email === this.register.email);
+    if (exists) {
+      alert('Email already registered.');
+      return;
+    }
+
+    users.push({ ...this.register });
+    localStorage.setItem('users', JSON.stringify(users));
+
+    this.registerSuccess = true;
+    setTimeout(() => {
+      this.registerSuccess = false;
+      this.register = { name: '', email: '', password: '' };
+      bootstrap.Modal.getInstance(document.getElementById('registerModal')).hide();
+    }, 2000);
+  }
+}
+
   },
 };
 </script>
