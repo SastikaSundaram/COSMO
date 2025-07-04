@@ -4,11 +4,7 @@ import router from './router';
 import store from './store';
 import Toast from 'vue-toastification';
 import 'vue-toastification/dist/index.css';
-import './assets/styles/main.css'
 
-const app = createApp(App);
-
-// Configure toast options
 const toastOptions = {
   position: 'top-right',
   timeout: 3000,
@@ -24,4 +20,8 @@ const toastOptions = {
   rtl: false
 };
 
-app.use(router).use(store).use(Toast, toastOptions).mount('#app');
+createApp(App)
+  .use(store)
+  .use(router)
+  .use(Toast, toastOptions)
+  .mount('#app');
