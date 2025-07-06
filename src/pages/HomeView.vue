@@ -1,10 +1,11 @@
+<!-- HomeView.vue -->
 <template>
   <div>
     <HeroSection />
     <CategoriesSection />
     <ProductsSection 
-      title="Best Sellers"
       :products="featuredProducts"
+      @add-to-cart="addToCart"
     />
     <FeaturesSection />
     <TestimonialsSection />
@@ -35,8 +36,13 @@ export default {
     const store = useStore()
     const featuredProducts = computed(() => store.getters.featuredProducts)
     
+    const addToCart = (product) => {
+      store.dispatch('addToCart', product)
+    }
+    
     return {
-      featuredProducts
+      featuredProducts,
+      addToCart
     }
   }
 }

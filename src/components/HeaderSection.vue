@@ -74,10 +74,39 @@ export default {
 </script>
 
 <style scoped>
+
+/* Remove all potential line causes */
 .header {
-  background: linear-gradient(135deg, #fff 0%, #fff 90%, #ffe6f2 100%);
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+  border-bottom: none;
+  box-shadow: none;
 }
+
+/* Clean dropdown toggle */
+.nav-link.dropdown-toggle::after {
+  border: none;
+  content: ""; /* Optional: Use custom icon */
+  font-size: 0.6em;
+  margin-left: 6px;
+  vertical-align: 2px;
+}
+
+/* If using hover effects */
+.nav-link::after {
+  content: "";
+  position: absolute;
+  bottom: -2px; /* Adjust position */
+  left: 50%;
+  transform: translateX(-50%);
+  width: 0;
+  height: 2px;
+  background: var(--primary);
+  transition: width 0.3s ease;
+}
+
+.nav-link:hover::after {
+  width: 70%; /* Only show on hover */
+}
+
 
 .logo {
   font-family: 'Playfair Display', serif;
@@ -100,25 +129,6 @@ export default {
   transition: all 0.3s ease;
 }
 
-.nav-link:hover {
-  color: var(--primary) !important;
-}
-
-.nav-link::after {
-  content: '';
-  position: absolute;
-  bottom: 0;
-  left: 50%;
-  transform: translateX(-50%);
-  width: 0;
-  height: 3px;
-  background: var(--primary);
-  transition: width 0.3s ease;
-}
-
-.nav-link:hover::after {
-  width: 70%;
-}
 
 .cart-count {
   position: absolute;

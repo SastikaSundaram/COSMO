@@ -1,26 +1,5 @@
 import { createRouter, createWebHistory } from 'vue-router'
 import HomeView from '../pages/HomeView.vue'
-import ProductList from '../pages/ProductList.vue'
-import ProductDetail from '../pages/ProductDetail.vue'
-import CartView from '../pages/CartView.vue'
-import CheckoutView from '../pages/CheckoutView.vue'
-
-// Get base URL safely
-const getBaseUrl = () => {
-  try {
-    // For Vue CLI projects
-    if (process.env.BASE_URL) {
-      return process.env.BASE_URL
-    }
-    // For Vite projects
-    if (import.meta.env.BASE_URL) {
-      return import.meta.env.BASE_URL
-    }
-    return '/'
-  } catch {
-    return '/'
-  }
-}
 
 const routes = [
   {
@@ -34,7 +13,7 @@ const routes = [
   {
     path: '/products',
     name: 'products',
-    component: ProductList,
+    component: () => import('../pages/ProductList.vue'),
     meta: {
       title: 'Our Products - GlowCosmetics'
     }
@@ -42,7 +21,7 @@ const routes = [
   {
     path: '/products/:id',
     name: 'product-detail',
-    component: ProductDetail,
+    component: () => import('../pages/ProductDetail.vue'), // Note the file name
     props: true,
     meta: {
       title: 'Product Details - GlowCosmetics'
@@ -51,7 +30,7 @@ const routes = [
   {
     path: '/cart',
     name: 'cart',
-    component: CartView,
+    component: () => import('../pages/CartView.vue'),
     meta: {
       title: 'Your Shopping Cart - GlowCosmetics'
     }
@@ -59,17 +38,15 @@ const routes = [
   {
     path: '/checkout',
     name: 'checkout',
-    component: CheckoutView,
+    component: () => import('../pages/CheckoutView.vue'),
     meta: {
-      title: 'Checkout - GlowCosmetics',
-      requiresAuth: false // Set to true if you implement authentication
+      title: 'Checkout - GlowCosmetics'
     }
   },
-  // 404 Catch-all route - now using a simple inline component
   {
     path: '/:pathMatch(.*)*',
     name: 'not-found',
-    component: () => import('../pages/NotFound.vue'), // Lazy-loaded
+    component: () => import('../pages/NotFound.vue'),
     meta: {
       title: 'Page Not Found - GlowCosmetics'
     }
@@ -77,21 +54,15 @@ const routes = [
 ]
 
 const router = createRouter({
-  history: createWebHistory(getBaseUrl()),
+  history: createWebHistory(process.env.BASE_URL),
   routes,
   scrollBehavior(to, from, savedPosition) {
-    if (savedPosition) {
-      return savedPosition
-    } else {
-      return { top: 0, behavior: 'smooth' }
-    }
+    return savedPosition || { top: 0 }
   }
 })
 
-// Update document title
-router.beforeEach((to, from, next) => {
+router.beforeEach((to) => {
   document.title = to.meta.title || 'GlowCosmetics'
-  next()
 })
 
 export default router

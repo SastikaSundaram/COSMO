@@ -2,9 +2,17 @@ import { createApp } from 'vue'
 import App from './App.vue'
 import router from './router'
 import store from './store'
-import './assets/main.css'
+import * as THREE from 'three'
 
-createApp(App)
-  .use(store)
-  .use(router)
-  .mount('#app')
+// First create the app
+const app = createApp(App)
+
+// Then configure global properties
+app.config.globalProperties.$THREE = THREE
+
+// Then use plugins
+app.use(router)
+app.use(store)
+
+// Finally mount
+app.mount('#app')

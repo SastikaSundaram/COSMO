@@ -1,31 +1,42 @@
 <template>
   <section class="showcase-section py-5">
     <div class="container">
-      <h2 class="section-title">Interactive Product Showcase</h2>
-      <div class="showcase-container">
-        <ThreeScene />
-        <div class="showcase-content">
-          <div class="showcase-text">
-            <h3>Explore Our New Fragrance</h3>
-            <p>Experience our new signature scent in stunning 3D. Rotate and zoom to explore every detail of this exquisite bottle design.</p>
-            <div class="showcase-controls">
-              <button class="btn btn-primary" @click="$emit('rotate')">
-                <i class="fas fa-sync-alt me-2"></i>Rotate Product
-              </button>
-            </div>
-          </div>
+      <h2 class="section-title text-center mb-5">Interactive Product Showcase</h2>
+      <div class="showcase-wrapper">
+        <!-- Centered 3D Viewer Container -->
+        <div class="viewer-container mx-auto">
+          <ThreeScene ref="threeScene" />
         </div>
+        
+        <!-- Text Content - Now positioned below -->
+        
       </div>
     </div>
   </section>
 </template>
 
 <script>
+import { ref } from 'vue'
 import ThreeScene from './ThreeScene.vue'
 
 export default {
-  components: {
-    ThreeScene
+  components: { ThreeScene },
+  setup() {
+    const threeScene = ref(null)
+    const isRotating = ref(false)
+
+    const toggleRotation = () => {
+      isRotating.value = !isRotating.value
+      if (threeScene.value) {
+        threeScene.value.toggleRotation()
+      }
+    }
+
+    return {
+      isRotating,
+      toggleRotation,
+      threeScene
+    }
   }
 }
 </script>
@@ -35,47 +46,68 @@ export default {
   background: linear-gradient(135deg, #fff 0%, #fcf0f7 100%);
 }
 
-.showcase-container {
+.container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 20px;
+}
+
+.showcase-wrapper {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.viewer-container {
+  width: 100%;
+  max-width: 600px;
   height: 500px;
-  position: relative;
-  border-radius: 20px;
+  border-radius: 15px;
   overflow: hidden;
-  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
 }
 
 .showcase-content {
-  position: absolute;
-  top: 0;
-  left: 0;
   width: 100%;
-  height: 100%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  z-index: 10;
-  padding: 2rem;
+  max-width: 600px;
 }
 
 .showcase-text {
-  max-width: 500px;
   background: rgba(255, 255, 255, 0.9);
   padding: 2rem;
   border-radius: 15px;
-  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
-  text-align: center;
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
 }
 
-.showcase-controls {
-  margin-top: 1.5rem;
+.btn-primary {
+  background-color: #ff6b9e;
+  border: none;
+  padding: 10px 25px;
+  color: white;
+  border-radius: 30px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.btn-primary:hover {
+  background-color: #ff4785;
+  transform: translateY(-2px);
+  box-shadow: 0 5px 15px rgba(255, 107, 158, 0.3);
+}
+
+.section-title {
+  font-size: 2.5rem;
+  color: #333;
+  font-weight: 600;
 }
 
 @media (max-width: 768px) {
-  .showcase-container {
+  .viewer-container {
     height: 400px;
   }
   
-  .showcase-text {
-    padding: 1.5rem;
+  .section-title {
+    font-size: 2rem;
   }
 }
 </style>
