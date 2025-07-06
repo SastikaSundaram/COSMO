@@ -1,12 +1,15 @@
 <template>
-  <section class="hero">
+  <section class="hero-section">
+    <div class="circle-decoration"></div>
     <div class="container">
-      <div class="hero-content fade-in">
-        <h1>Discover Your Radiance</h1>
-        <p>Premium cosmetics crafted with care to enhance your natural beauty. Experience luxury skincare and makeup that makes you feel confident and beautiful.</p>
-        <div>
-          <router-link to="/shop" class="btn">Shop Collection</router-link>
-          <router-link to="/about" class="btn btn-outline">Learn More</router-link>
+      <div class="row align-items-center">
+        <div class="col-lg-6 hero-content">
+          <h1 class="hero-title">Discover Your <span>Inner Glow</span></h1>
+          <p class="hero-subtitle">Premium cosmetics and skincare products to enhance your natural beauty. Cruelty-free and ethically sourced.</p>
+          <router-link to="/products" class="btn btn-primary">Shop Now</router-link>
+        </div>
+        <div class="col-lg-6 text-center">
+          <img src="https://images.unsplash.com/photo-1522338242992-e1a54906a8da?ixlib=rb-1.2.1&auto=format&fit=crop&w=600&q=80" alt="Beauty Products" class="img-fluid hero-image">
         </div>
       </div>
     </div>
@@ -14,66 +17,69 @@
 </template>
 
 <style scoped>
-.hero {
-  background: linear-gradient(rgba(42, 12, 78, 0.8), rgba(42, 12, 78, 0.8)), 
-              url('https://images.unsplash.com/photo-1596462502278-27bfdc403348?q=80&w=1480') center/cover;
-  height: 80vh;
-  display: flex;
-  align-items: center;
-  color: white;
+.hero-section {
+  background: linear-gradient(135deg, #fff 0%, #fff 50%, #fcf0f7 100%);
+  padding: 5rem 0;
   position: relative;
   overflow: hidden;
 }
 
 .hero-content {
-  max-width: 600px;
+  position: relative;
   z-index: 2;
 }
 
-.hero h1 {
+.hero-title {
   font-size: 3.5rem;
-  margin-bottom: 20px;
+  font-weight: 700;
   line-height: 1.2;
+  margin-bottom: 1.5rem;
+  color: var(--dark);
 }
 
-.hero p {
+.hero-title span {
+  color: var(--primary);
+}
+
+.hero-subtitle {
   font-size: 1.2rem;
-  margin-bottom: 30px;
-  opacity: 0.9;
+  color: #666;
+  margin-bottom: 2rem;
+  max-width: 500px;
+}
+
+.hero-image {
+  position: relative;
+  z-index: 2;
+  animation: float 4s ease-in-out infinite;
+}
+
+@keyframes float {
+  0% { transform: translateY(0px); }
+  50% { transform: translateY(-15px); }
+  100% { transform: translateY(0px); }
+}
+
+.circle-decoration {
+  position: absolute;
+  width: 600px;
+  height: 600px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #ffd1e4 0%, #ffeff7 100%);
+  top: -200px;
+  right: -200px;
+  z-index: 1;
 }
 
 @media (max-width: 992px) {
-  .hero h1 {
-    font-size: 3rem;
+  .hero-title {
+    font-size: 2.8rem;
   }
 }
 
 @media (max-width: 768px) {
-  .hero h1 {
-    font-size: 2.5rem;
-  }
-}
-
-@media (max-width: 576px) {
-  .hero {
-    height: 70vh;
-  }
-  
-  .hero h1 {
-    font-size: 2rem;
-  }
-  
-  .hero p {
-    font-size: 1rem;
-  }
-  
-  .btn {
-    width: 100%;
-    margin-bottom: 10px;
-  }
-  
-  .btn-outline {
-    margin-left: 0;
+  .hero-title {
+    font-size: 2.3rem;
   }
 }
 </style>

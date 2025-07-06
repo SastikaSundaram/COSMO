@@ -1,35 +1,97 @@
-import { createRouter, createWebHistory } from 'vue-router';
-import HomeView from '@/views/HomeView.vue';
-import LoginPage from '@/views/LoginPage.vue';
-import CartPage from '@/views/CartPage.vue';
-import CheckoutPage from '@/views/CheckoutPage.vue';
-import CategoryView from '@/views/CategoryView.vue';
-import ProductView from '@/views/ProductView.vue';
-import AccountView from '@/views/AccountView.vue';
-import WishlistView from '@/views/WishlistView.vue';
+import { createRouter, createWebHistory } from 'vue-router'
+import HomeView from '../pages/HomeView.vue'
+import ProductList from '../pages/ProductList.vue'
+import ProductDetail from '../pages/ProductDetail.vue'
+import CartView from '../pages/CartView.vue'
+import CheckoutView from '../pages/CheckoutView.vue'
+
+// Get base URL safely
+const getBaseUrl = () => {
+  try {
+    // For Vue CLI projects
+    if (process.env.BASE_URL) {
+      return process.env.BASE_URL
+    }
+    // For Vite projects
+    if (import.meta.env.BASE_URL) {
+      return import.meta.env.BASE_URL
+    }
+    return '/'
+  } catch {
+    return '/'
+  }
+}
 
 const routes = [
-  { path: '/', name: 'Home', component: HomeView },
-  { path: '/login', name: 'Login', component: LoginPage },
-  { path: '/cart', name: 'Cart', component: CartPage },
-  { path: '/checkout', name: 'Checkout', component: CheckoutPage },
-  { path: '/makeup', name: 'Makeup', component: CategoryView, props: { category: 'makeup' } },
-  { path: '/skincare', name: 'Skincare', component: CategoryView, props: { category: 'skincare' } },
-  { path: '/fragrance', name: 'Fragrance', component: CategoryView, props: { category: 'fragrance' } },
-  { path: '/haircare', name: 'Haircare', component: CategoryView, props: { category: 'haircare' } },
-  { path: '/product/:id', name: 'Product', component: ProductView },
-  { path: '/account', name: 'Account', component: AccountView },
-  { path: '/wishlist', name: 'Wishlist', component: WishlistView }
-];
+  {
+    path: '/',
+    name: 'home',
+    component: HomeView,
+    meta: {
+      title: 'GlowCosmetics - Premium Beauty Products'
+    }
+  },
+  {
+    path: '/products',
+    name: 'products',
+    component: ProductList,
+    meta: {
+      title: 'Our Products - GlowCosmetics'
+    }
+  },
+  {
+    path: '/products/:id',
+    name: 'product-detail',
+    component: ProductDetail,
+    props: true,
+    meta: {
+      title: 'Product Details - GlowCosmetics'
+    }
+  },
+  {
+    path: '/cart',
+    name: 'cart',
+    component: CartView,
+    meta: {
+      title: 'Your Shopping Cart - GlowCosmetics'
+    }
+  },
+  {
+    path: '/checkout',
+    name: 'checkout',
+    component: CheckoutView,
+    meta: {
+      title: 'Checkout - GlowCosmetics',
+      requiresAuth: false // Set to true if you implement authentication
+    }
+  },
+  // 404 Catch-all route - now using a simple inline component
+  {
+    path: '/:pathMatch(.*)*',
+    name: 'not-found',
+    component: () => import('../pages/NotFound.vue'), // Lazy-loaded
+    meta: {
+      title: 'Page Not Found - GlowCosmetics'
+    }
+  }
+]
 
 const router = createRouter({
-  history: createWebHistory(process.env.BASE_URL),
-  routes
-});
+  history: createWebHistory(getBaseUrl()),
+  routes,
+  scrollBehavior(to, from, savedPosition) {
+    if (savedPosition) {
+      return savedPosition
+    } else {
+      return { top: 0, behavior: 'smooth' }
+    }
+  }
+})
 
+// Update document title
 router.beforeEach((to, from, next) => {
-  console.log(`Navigating to: ${to.path}`);
-  next();
-});
+  document.title = to.meta.title || 'GlowCosmetics'
+  next()
+})
 
-export default router;
+export default router
